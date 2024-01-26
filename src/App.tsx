@@ -1,8 +1,12 @@
 import Router from "components/Router";
-import "./App.css";
-
+import { Layout } from "components/Layout";
 function App() {
-  return <Router />;
+  return (
+    /* Layout으로 Router를 감싸면서 모든 페이지에 적용 */
+    <Layout>
+      <Router />
+    </Layout>
+  );
 }
 
 export default App;

@@ -15,18 +15,23 @@ export default function Router() {
     <Routes>
       <Route path="/" element={<Homepage />}></Route>
 
+      {/* POST */}
       <Route path="/posts" element={<PostListPage />}></Route>
       <Route path="/posts/:id" element={<PostDetail />}></Route>
       <Route path="/posts/new" element={<PostNew />}></Route>
       <Route path="/posts/edit/:id" element={<PostEdit />}></Route>
 
+      {/* PROFILE */}
       <Route path="/profile" element={<ProfilePage />}></Route>
       <Route path="/profile/edit" element={<ProfileEdit />}></Route>
 
+      {/* NOTIFICATIONS */}
       <Route path="/notifications" element={<NotificationsPage />}></Route>
 
+      {/* SEARCH */}
       <Route path="/search" element={<SearchPage />}></Route>
 
+      {/* USERS */}
       <Route path="/users/login" element={<LoginPage />}></Route>
       <Route path="/users/signup" element={<SignupPage />}></Route>
       <Route path="*" element={<Navigate replace to="/" />}></Route>
