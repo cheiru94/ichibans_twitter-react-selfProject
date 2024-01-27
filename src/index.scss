@@ -220,7 +220,7 @@ body {
       button {
         @extend .button; // 위에 설정해 놓은 button 사용
 
-        // 부모 선택자에 클래스를 추가
+        //  &.  :  현재 선택자를 참조
         &.post__delete {
           background-color: $danger;
 
