@@ -83,6 +83,22 @@ body {
       background-color: transparent;
       padding: 16px 0px;
       backdrop-filter: blur(3px) !important;
+      cursor: pointer;
+
+      .footer__icon {
+        background-color: transparent;
+      }
+
+      &:hover {
+        transition: all 0.3s;
+        color: $primaryColor;
+
+        .footer__icon {
+          transition: all 0.3s;
+          background-color: transparent;
+          fill: $primaryColor;
+        }
+      }
     }
   }
 }
@@ -161,6 +177,10 @@ body {
     @extend .button;
     padding: 0.5rem 1rem;
     background-color: $primaryColor;
+    &:hover {
+      transition: all 0.3s;
+      background-color: $activeBorder;
+    }
   }
 }
 
@@ -227,6 +247,7 @@ body {
           &:hover,
           &:focus {
             background-color: $dangerDark;
+            transition: all 0.3s;
           }
         }
         &.post__edit {
@@ -239,6 +260,7 @@ body {
           &:hover,
           &:focus {
             background-color: $grayDark;
+            transition: all 0.3s;
           }
         }
 
@@ -249,6 +271,7 @@ body {
           &:hover,
           &:focus {
             color: $primaryColor;
+            transition: all 0.3s;
           }
         }
       }

@@ -9,32 +9,48 @@ import ProfileEdit from "pages/profile/edit";
 import SearchPage from "pages/search";
 import NotificationsPage from "pages/notifications/notifications";
 import LoginPage from "pages/users/login";
-import SignupPage from "pages/users/singup";
-export default function Router() {
+import SignupPage from "pages/users/signup";
+
+/* 라우터에 해당 앱이 로그인 되어있는지 아닌지 판별하는 값을 app페이지로 부터 받기 */
+
+/* 인증된 사용자가 로그인 되었는지 안되었는지 확인 */
+interface RouterProps {
+  isAuthenticated: boolean;
+}
+
+export default function Router({ isAuthenticated }: RouterProps) {
   return (
     <Routes>
-      <Route path="/" element={<Homepage />}></Route>
+      {isAuthenticated ? (
+        <>
+          <Route path="/" element={<Homepage />} />
 
-      {/* 1. POST */}
-      <Route path="/posts" element={<PostListPage />}></Route>
-      <Route path="/posts/:id" element={<PostDetail />}></Route>
-      <Route path="/posts/new" element={<PostNew />}></Route>
-      <Route path="/posts/edit/:id" element={<PostEdit />}></Route>
+          {/* 1. POST */}
+          <Route path="/posts" element={<PostListPage />} />
+          <Route path="/posts/:id" element={<PostDetail />} />
+          <Route path="/posts/new" element={<PostNew />} />
+          <Route path="/posts/edit/:id" element={<PostEdit />} />
 
-      {/* 2. PROFILE */}
-      <Route path="/profile" element={<ProfilePage />}></Route>
-      <Route path="/profile/edit" element={<ProfileEdit />}></Route>
+          {/* 2. PROFILE */}
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/edit" element={<ProfileEdit />} />
 
-      {/* 3. NOTIFICATIONS */}
-      <Route path="/notifications" element={<NotificationsPage />}></Route>
+          {/* 3. NOTIFICATIONS */}
+          <Route path="/notifications" element={<NotificationsPage />} />
 
-      {/* 4. SEARCH */}
-      <Route path="/search" element={<SearchPage />}></Route>
+          {/* 4. SEARCH */}
+          <Route path="/search" element={<SearchPage />} />
 
-      {/* 5. USERS */}
-      <Route path="/users/login" element={<LoginPage />}></Route>
-      <Route path="/users/signup" element={<SignupPage />}></Route>
-      <Route path="*" element={<Navigate replace to="/" />}></Route>
+          <Route path="*" element={<Navigate replace to="/" />} />
+        </>
+      ) : (
+        <>
+          {/* 5. USERS */}
+          <Route path="/users/login" element={<LoginPage />} />
+          <Route path="/users/signup" element={<SignupPage />} />
+          <Route path="*" element={<Navigate replace to="/users/login" />} />
+        </>
+      )}
     </Routes>
   );
 }
