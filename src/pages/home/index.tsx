@@ -1,9 +1,5 @@
-import { FiImage } from "react-icons/fi";
-import { FaCircleUser } from "react-icons/fa6";
-import { FaHeart } from "react-icons/fa";
-import { FaRegComment } from "react-icons/fa6";
-
-import { Link } from "react-router-dom";
+import PostForm from "components/posts/PostForm";
+import PostBox from "components/posts/PostBox";
 
 export interface PostProps {
   id: string;
@@ -62,13 +58,8 @@ const posts: PostProps[] = [
   },
 ];
 
+/* 🟢 메인 홈페이지 */
 export default function Homepage() {
-  //
-  const handleFileUpload = () => {};
-
-  //
-  const handleDelete = () => {};
-
   return (
     <div className="home">
       <div className="home__title">Home</div>
@@ -77,81 +68,13 @@ export default function Homepage() {
         <div className="home__tab">Follwing</div>
       </div>
 
-      {/* POST FORM 태그 */}
-      <form className="post-form">
-        <textarea
-          className="post-form__textarea"
-          required
-          name="content"
-          id="content"
-          placeholder="what is happening"
-        ></textarea>
-        <div className="post-form__submit-area">
-          <label htmlFor="file-input" className="post-form__file">
-            <FiImage className="post-form__file-icon" />
-          </label>
-          <input
-            type="file"
-            name="file-input"
-            accept="image/*"
-            onChange={handleFileUpload}
-            className="hidden"
-          />
-          <input
-            type="submit"
-            value="Tweet"
-            className="post-form__submit-btn"
-          />
-        </div>
-      </form>
-      {/* TWEET FORM 태그 */}
+      {/* 1. POST FORM 태그 */}
+      <PostForm />
+
+      {/* 2. TWEET FORM 태그 */}
       <div className="post">
         {posts?.map((post) => (
-          <div className="post__box" key={post?.id}>
-            <Link to={`/posts/${post?.id}`}>
-              <div className="post__box-profile">
-                {/* flex되는 부분 */}
-                <div className="post__flex">
-                  {post.profileUrl ? (
-                    <img
-                      src={post?.profileUrl}
-                      alt="profile"
-                      className=""
-                      post__box-profile-icon
-                    />
-                  ) : (
-                    <FaCircleUser className="post_box-profile-icon" />
-                  )}
-                  <div className="post__email">{post?.email}</div>
-                  <div className="post__createdAt">{post?.createdAt}</div>
-                </div>
-                <div className="post__box-content">{post?.content}</div>
-              </div>
-            </Link>
-            {/* post.uid === user.uid 일 떄 */}
-            <div className="post__box-footer">
-              <>
-                <button
-                  type="button"
-                  className="post__delete"
-                  onClick={handleDelete}
-                >
-                  Delete
-                </button>
-                <button type="button" className="post__edit">
-                  <Link to={`/posts/edit/${post.id}`}>Edit</Link>
-                </button>
-              </>
-              <button type="button" className="post__likes">
-                <FaHeart />
-                {post?.likeCount || 0}
-              </button>
-              <button type="button" className="post__comments">
-                <FaRegComment />
-                {post.comments?.length || 0}
-              </button>
-            </div>
-          </div>
+          <PostBox post={post} key={post.id} />
         ))}
       </div>
     </div>
