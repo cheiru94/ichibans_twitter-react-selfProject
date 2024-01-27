@@ -61,17 +61,20 @@ const posts: PostProps[] = [
 /* 🟢 메인 홈페이지 */
 export default function Homepage() {
   return (
+    /* HOME */
     <div className="home">
-      <div className="home__title">Home</div>
+      {/* 1. HOME TITLE */}
+      <div className="home__title">ホーム</div>
+      {/* 2. HOME TABS :  アナタへ | フォロー */}
       <div className="home__tabs">
-        <div className="home__tab home__tab--active">For you</div>
-        <div className="home__tab">Follwing</div>
+        <div className="home__tab home__tab--active">アナタへ</div>
+        <div className="home__tab">フォロー</div>
       </div>
 
-      {/* 1. POST FORM 태그 */}
+      {/* 3. POST FORM 태그 : textarea , label , input_file , input_submit*/}
       <PostForm />
 
-      {/* 2. TWEET FORM 태그 */}
+      {/* 4. TWEET FORM 태그 */}
       <div className="post">
         {posts?.map((post) => (
           <PostBox post={post} key={post.id} />

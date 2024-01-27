@@ -1,5 +1,5 @@
 $background: #7552ff;
-// $background: #8960fa;
+
 // $background: #1e293b;
 $activeBg: #ffffff93;
 // $activeBg: #e5e2dfd0;
@@ -7,11 +7,12 @@ $white: #ffffff;
 $border: #419bf4;
 
 $primaryColor: #47efbfd9;
-// $primaryColor: #47efbf;
-// $primaryColor: #60a5fa;
-$activeBorder: #3b82f6;
+
+$activeBorder: #419bf4;
+// $activeBorder: #3b82f6;
 $grayText: #9ca3af;
-$danger: #dc2626;
+$danger: #fb3997;
+// $danger: #dc2626;
 $dangerDark: #dc26268e;
 $gray: #6b7280;
 $grayDark: #4c515b;
@@ -86,7 +87,7 @@ body {
   }
 }
 
-/* HOME 레이아웃 */
+/* HOME */
 .home {
   &__title {
     padding: 16px;
@@ -163,7 +164,7 @@ body {
   }
 }
 
-/* POST 레이아웃 */
+/* POST */
 .post {
   padding-bottom: 40px;
 
@@ -217,7 +218,7 @@ body {
       flex-direction: row-reverse;
 
       button {
-        @extend .button;
+        @extend .button; // 위에 설정해 놓은 button 사용
 
         // 부모 선택자에 클래스를 추가
         &.post__delete {
@@ -247,7 +248,7 @@ body {
 
           &:hover,
           &:focus {
-            color: $gray;
+            color: $primaryColor;
           }
         }
       }
