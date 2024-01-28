@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { app } from "firebaseApp";
+import { app } from "firebaseApp"; // Firebase 앱 인스턴스
 
 import { toast } from "react-toastify";
 
@@ -14,11 +14,13 @@ export default function SignupForm() {
   const [password, setPassword] = useState<string>("");
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>("");
   const navigate = useNavigate();
+
+  /* onSubmit 함수 */
   const onSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      /* auth : Firebase Authentication 서비스의 인증 객체 */
-      const auth = getAuth(app); // FirebaseApp에서 app 변수로 인증객체 생성하기 -> getAuth()
+      /* auth : Firebase Authentication 서비스의 인증 객체 : 인증 서비스의 다양한 기능(로그인, 로그아웃, 계정 생성 등)을 사용가능 */
+      const auth = getAuth(app); // Firebase 앱 인스턴스에 연결된 인증 서비스의 인스턴스를 가져와 인증객체 생성
       console.log("auth: ", auth);
       /*  새로운 사용자를 등록하는 함수 : 새로운 사용자가 생성되고 Firebase Authentication 서비스에 등록*/
       await createUserWithEmailAndPassword(auth, email, password); // auth라는 인증 객체를 넣어야 createUserWithEmailAndPassword 메서드에 대한 접근 권한이 생긴다.
@@ -29,6 +31,7 @@ export default function SignupForm() {
       toast.error(error?.code);
     }
   };
+  /* onChange 함수 */
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target; // React의 이벤트 시스템은 비동기적으로 동작
 
@@ -123,7 +126,7 @@ export default function SignupForm() {
       <div className="form__block">
         <button
           type="submit"
-          className="form__btn-submit"
+          className="form__btn--submit"
           disabled={error.length > 0} // 에러시 비활성화
         >
           新規加入
