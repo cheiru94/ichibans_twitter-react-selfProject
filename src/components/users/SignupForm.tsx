@@ -15,26 +15,30 @@ export default function SignupForm() {
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>("");
   const navigate = useNavigate();
 
-  /* onSubmit 함수 */
+  /* 🟡 onSubmit 함수 */
   const onSubmit = async (e: any) => {
     e.preventDefault();
     try {
       /* auth : Firebase Authentication 서비스의 인증 객체 : 인증 서비스의 다양한 기능(로그인, 로그아웃, 계정 생성 등)을 사용가능 */
       const auth = getAuth(app); // Firebase 앱 인스턴스에 연결된 인증 서비스의 인스턴스를 가져와 인증객체 생성
       console.log("auth: ", auth);
+
       /*  새로운 사용자를 등록하는 함수 : 새로운 사용자가 생성되고 Firebase Authentication 서비스에 등록*/
       await createUserWithEmailAndPassword(auth, email, password); // auth라는 인증 객체를 넣어야 createUserWithEmailAndPassword 메서드에 대한 접근 권한이 생긴다.
+
       navigate("/"); // 로그인 했다면 home 화면으로 전환
 
-      toast.success("会員登録を完了しました");
+      toast.success("会員登録を完了しました"); // 로그인 시 "완료"토스트 처리
     } catch (error: any) {
       toast.error(error?.code);
     }
   };
-  /* onChange 함수 */
+  /*  🟡 onChange 함수 */
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target; // React의 이벤트 시스템은 비동기적으로 동작
 
+    /* 오류 처리 */
+    // 이메일
     if (name === "email") {
       setEmail(value);
       const validRegex =
@@ -47,6 +51,7 @@ export default function SignupForm() {
       }
     }
 
+    // 비밀번호
     if (name === "password") {
       setPassword(value);
       if (value?.length < 8) {
@@ -57,6 +62,7 @@ export default function SignupForm() {
         setError("");
       }
     }
+    // 비밀번호 재확인
 
     if (name === "password_confirmation") {
       setPasswordConfirmation(value);

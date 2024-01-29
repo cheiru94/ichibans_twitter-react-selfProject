@@ -2,20 +2,23 @@ import { User, getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "firebaseApp";
 import { ReactNode, createContext, useEffect, useState } from "react";
 
+/* 🟡 Interface */
 interface AuthProps {
   children: ReactNode;
 }
 
-// 🟡 createContext
+/* 🟡 createContext */
 const AuthContext = createContext({
   user: null as User | null,
 });
 
+/* 🟡 AuthContextProvider  -> index.tsx에서 전체를 감싸준다 : 전역적을 관리하기 위함*/
 export const AuthContextProvider = ({ children }: AuthProps) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null); // 현재 로그인한 유저
   const auth = getAuth(app);
 
   useEffect(() => {
+    // 옵저버
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setCurrentUser(user);

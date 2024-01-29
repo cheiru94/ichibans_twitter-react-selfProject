@@ -15,23 +15,26 @@ export default function MenuList() {
   return (
     <div className="footer">
       <div className="footer__grid">
+        {/* 1. 홈 */}
         <button type="button" onClick={() => navigate("/")}>
           <CiHome className="footer__icon" />
           Home
         </button>
+
+        {/* 2. 프로필 */}
         <button type="button" onClick={() => navigate("/profile")}>
           <CiUser className="footer__icon" /> Profile
         </button>
 
-        {/* user의 로그인 유무 */}
+        {/* 3. 로그인 상태 : user의 유무에 따른 메뉴 로그인 버튼 상태 처리 */}
         {user === null ? (
-          // 로그인 되어있지 않을 때
+          // 3.1. 로그인 되어있지 않을 때
           <button type="button" onClick={() => navigate("/users/login")}>
             <IoLogInSharp className="footer__icon" />
             Login
           </button>
         ) : (
-          // 로그인 되어있을 때
+          // 3.2. 로그인 되어있을 때
           <button type="button" onClick={() => navigate("/")}>
             <IoIosLogOut className="footer__icon" />
             Logout
