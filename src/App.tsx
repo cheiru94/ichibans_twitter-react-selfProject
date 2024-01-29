@@ -43,7 +43,12 @@ function App() {
   return (
     /* Layout으로 Router를 감싸면서 모든 페이지에 적용 */
     <Layout>
-      <ToastContainer />
+      <ToastContainer
+        theme="colored" // 테마
+        autoClose={1000} // 실행 시간
+        hideProgressBar // 진행바 숨기기
+        newestOnTop // 가장 최신게 위로
+      />
       {/* init이 되었을 경우에만 Router 표시 */}
 
       {init ? <Router isAuthenticated={isAuthenticated} /> : <Loader />}

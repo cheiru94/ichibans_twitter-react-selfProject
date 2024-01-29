@@ -1,4 +1,4 @@
-/* 🟡 회원가입 로직 작성*/
+/* 🟡 회원가입 로직 작성 : createUserWithEmailAndPassword */
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -56,7 +56,7 @@ export default function SignupForm() {
       setPassword(value);
       if (value?.length < 8) {
         setError("８文字以上を入力して下さい");
-      } else if (value !== password) {
+      } else if (value !== passwordConfirmation) {
         setError("パスワードが正しくありません");
       } else {
         setError("");
@@ -129,7 +129,7 @@ export default function SignupForm() {
           ログイン
         </Link>
       </div>
-      <div className="form__block">
+      <div className="form__block--lg">
         <button
           type="submit"
           className="form__btn--submit"

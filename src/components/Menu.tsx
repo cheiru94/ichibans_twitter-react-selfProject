@@ -5,6 +5,9 @@ import { IoIosLogOut } from "react-icons/io";
 import { IoLogInSharp } from "react-icons/io5";
 import { useContext } from "react";
 import AuthContext from "context/AuthContext";
+import { getAuth, signOut } from "firebase/auth"; // 로그아웃
+import { app } from "firebaseApp";
+import { toast } from "react-toastify";
 
 export default function MenuList() {
   const { user } = useContext(AuthContext); // 🟡  useContext로 user받아 쓰기
@@ -28,14 +31,21 @@ export default function MenuList() {
 
         {/* 3. 로그인 상태 : user의 유무에 따른 메뉴 로그인 버튼 상태 처리 */}
         {user === null ? (
-          // 3.1. 로그인 되어있지 않을 때
+          // 3.1. Login 표시
           <button type="button" onClick={() => navigate("/users/login")}>
             <IoLogInSharp className="footer__icon" />
             Login
           </button>
         ) : (
-          // 3.2. 로그인 되어있을 때
-          <button type="button" onClick={() => navigate("/")}>
+          // 3.2. Logout 표시　 : 로그 아웃처리
+          <button
+            type="button"
+            onClick={async () => {
+              const auth = getAuth(app);
+              await signOut(auth);
+              toast.success("ログアウトされました！");
+            }}
+          >
             <IoIosLogOut className="footer__icon" />
             Logout
           </button>
