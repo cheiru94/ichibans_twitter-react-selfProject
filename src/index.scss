@@ -354,6 +354,7 @@ body {
     color: red;
   }
 
+  // 구글 로그인
   &__btn--google {
     @extend .form__btn--submit;
     background-color: $white;
@@ -366,6 +367,7 @@ body {
     }
   }
 
+  // 구글 로그인
   &__btn--github {
     @extend .form__btn--submit;
     background-color: black;

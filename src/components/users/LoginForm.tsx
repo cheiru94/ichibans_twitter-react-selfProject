@@ -3,10 +3,19 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup, // 팝업 창을 사용하여 로그인 과정을 진행
+  GoogleAuthProvider, // 구글 로그인
+  GithubAuthProvider, // 깃허브 로그인
+} from "firebase/auth";
 import { app } from "firebaseApp"; // Firebase 앱 인스턴스
 
 import { toast } from "react-toastify";
+
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 
 export default function LoginForm() {
   const [error, setError] = useState<string>("");
@@ -62,6 +71,35 @@ export default function LoginForm() {
     }
   };
 
+  /*  🟡 onClickSocialLogin 함수 : OAuth 인증 처리 ( google | github ) */
+  const onClickSocialLogin = async (e: any) => {
+    const { name } = e.target;
+
+    let provider;
+    const auth = getAuth(app); // signInWithPopup( ) 를 사용하기 위해 호출
+
+    if (name === "google") {
+      provider = new GoogleAuthProvider();
+    }
+    if (name === "github") {
+      provider = new GithubAuthProvider();
+    }
+
+    await signInWithPopup(
+      auth,
+      provider as GoogleAuthProvider | GithubAuthProvider // provider 타입 지정
+    )
+      .then((result) => {
+        console.log(result);
+        toast.success("로그인 되었습니다.");
+      })
+      .catch((error) => {
+        console.log(error);
+        const errorMessage = error?.message;
+        toast?.error(errorMessage);
+      });
+  };
+
   return (
     <form className="form form--lg" onSubmit={onSubmit}>
       {/* 1. 로그인 문구 */}
@@ -100,7 +138,7 @@ export default function LoginForm() {
 
       <div className="form__block">
         アカウントがありませんか？
-        <Link to="/users/signin" className="form__link">
+        <Link to="/users/signup" className="form__link">
           新規加入
         </Link>
       </div>
@@ -111,6 +149,32 @@ export default function LoginForm() {
           disabled={error.length > 0} // 에러시 비활성화
         >
           ログイン
+        </button>
+      </div>
+
+      {/* OAuth 로그인 */}
+      {/* 구글 */}
+      <div className="form__block">
+        <button
+          type="button"
+          name="google"
+          className="form__btn--google"
+          onClick={onClickSocialLogin}
+        >
+          <FcGoogle style={{ backgroundColor: "transparent" }} />
+          &nbsp; Googleでログイン
+        </button>
+      </div>
+      {/* 깃허브 */}
+      <div className="form__block">
+        <button
+          type="button"
+          name="github"
+          className="form__btn--github"
+          onClick={onClickSocialLogin}
+        >
+          <FaGithub style={{ backgroundColor: "transparent" }} />
+          &nbsp; Githubでログイン
         </button>
       </div>
     </form>

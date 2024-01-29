@@ -44,7 +44,7 @@ function App() {
     /* Layout으로 Router를 감싸면서 모든 페이지에 적용 */
     <Layout>
       <ToastContainer
-        theme="colored" // 테마
+        theme="dark" // 테마
         autoClose={1000} // 실행 시간
         hideProgressBar // 진행바 숨기기
         newestOnTop // 가장 최신게 위로
