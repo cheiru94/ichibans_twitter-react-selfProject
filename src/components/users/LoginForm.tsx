@@ -32,7 +32,7 @@ export default function LoginForm() {
       const auth = getAuth(app); // Firebase 앱 인스턴스에 연결된 인증 서비스의 인스턴스를 가져와 인증객체 생성
       console.log("auth: ", auth);
 
-      /*  새로운 사용자를 등록하는 함수 : 새로운 사용자가 생성되고 Firebase Authentication 서비스에 등록*/
+      /*  회원가입 (새로운 사용자를 등록하는 함수) : 새로운 사용자가 생성되고 Firebase Authentication 서비스에 등록*/
       await signInWithEmailAndPassword(auth, email, password); // auth라는 인증 객체를 넣어야 createUserWithEmailAndPassword 메서드에 대한 접근 권한이 생긴다.
 
       navigate("/"); // 로그인 했다면 home 화면으로 전환
@@ -73,18 +73,21 @@ export default function LoginForm() {
 
   /*  🟡 onClickSocialLogin 함수 : OAuth 인증 처리 ( google | github ) */
   const onClickSocialLogin = async (e: any) => {
-    const { name } = e.target;
+    const { name } = e.target; // 클릭한 OAuth 종류
 
     let provider;
     const auth = getAuth(app); // signInWithPopup( ) 를 사용하기 위해 호출
 
+    // OAuth 종류에 따른 처리
     if (name === "google") {
       provider = new GoogleAuthProvider();
     }
+
     if (name === "github") {
       provider = new GithubAuthProvider();
     }
 
+    // 팝업창
     await signInWithPopup(
       auth,
       provider as GoogleAuthProvider | GithubAuthProvider // provider 타입 지정

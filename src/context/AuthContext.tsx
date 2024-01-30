@@ -9,12 +9,12 @@ interface AuthProps {
 
 /* 🟡 createContext */
 const AuthContext = createContext({
-  user: null as User | null,
+  user: null as User | null, // 기본 값은 null , user의 속성은 User | null
 });
 
 /* 🟡 AuthContextProvider  -> index.tsx에서 전체를 감싸준다 : 전역적을 관리하기 위함*/
 export const AuthContextProvider = ({ children }: AuthProps) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null); // 현재 로그인한 유저
+  const [currentUser, setCurrentUser] = useState<User | null>(null); // User: 현재 로그인한 유저
   const auth = getAuth(app);
 
   useEffect(() => {

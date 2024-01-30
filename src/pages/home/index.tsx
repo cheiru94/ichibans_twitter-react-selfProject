@@ -63,12 +63,14 @@ export default function Homepage() {
   return (
     /* HOME */
     <div className="home">
-      {/* 1. HOME TITLE */}
-      <div className="home__title">ホーム</div>
-      {/* 2. HOME TABS :  アナタへ | フォロー */}
-      <div className="home__tabs">
-        <div className="home__tab home__tab--active">アナタへ</div>
-        <div className="home__tab">フォロー</div>
+      <div className="home__top">
+        {/* 1. HOME TITLE */}
+        <div className="home__title">ホーム</div>
+        {/* 2. HOME TABS :  アナタへ | フォロー */}
+        <div className="home__tabs">
+          <div className="home__tab home__tab--active">アナタへ</div>
+          <div className="home__tab">フォロー</div>
+        </div>
       </div>
 
       {/* 3. POST FORM 태그 : textarea , label , input_file , input_submit*/}

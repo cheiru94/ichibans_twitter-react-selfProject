@@ -30,6 +30,7 @@ export default function SignupForm() {
     try {
       /* auth : Firebase Authentication 서비스의 인증 객체 : 인증 서비스의 다양한 기능(로그인, 로그아웃, 계정 생성 등)을 사용가능 */
       const auth = getAuth(app); // Firebase 앱 인스턴스에 연결된 인증 서비스의 인스턴스를 가져와 인증객체 생성
+
       console.log("auth: ", auth);
 
       /*  새로운 사용자를 등록하는 함수 : 새로운 사용자가 생성되고 Firebase Authentication 서비스에 등록*/
@@ -99,6 +100,7 @@ export default function SignupForm() {
       provider = new GithubAuthProvider();
     }
 
+    // 팝업창
     await signInWithPopup(
       auth,
       provider as GoogleAuthProvider | GithubAuthProvider // provider 타입 지정
