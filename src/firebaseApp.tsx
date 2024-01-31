@@ -4,6 +4,7 @@
   getApp - 이미 초기화된 Firebase 앱의 인스턴스를 가져오는 함수
 */
 import { initializeApp, FirebaseApp, getApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore"; // Firestore 데이터베이스
 
 /* 
   이 부분에서는 app이라는 이름의 변수를 선언하고, 이 변수의 타입을 FirebaseApp으로 설정
@@ -33,5 +34,7 @@ try {
 }
 
 const firebase = initializeApp(firebaseConfig); // try-catch 구문과 관계없이 항상 실행
+
+export const db = getFirestore(app); // Firestore 데이터베이스의 인스턴스를 반환하는 함수
 
 export default firebase;
