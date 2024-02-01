@@ -15,7 +15,9 @@ export default function PostForm() {
     e.preventDefault();
 
     try {
+      // db : Firestore 데이터베이스를 나타내는 객체
       await addDoc(collection(db, "posts"), {
+        // (데이터베이스 , 컬렉션 이름)
         content: content, // 입력 받는 내용
         createAt: new Date()?.toLocaleDateString("ko", {
           // toLocaleDateString까지 넣어줘야 날짜를 인식한다
