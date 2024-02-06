@@ -8,7 +8,7 @@ export default function PostForm() {
   //
 
   const [content, setContent] = useState<string>("");
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext); // * context 가져오기
   const handleFileUpload = () => {};
 
   const onSubmit = async (e: any) => {
@@ -20,14 +20,18 @@ export default function PostForm() {
         //  addDoc(collection(데이터베이스 , 컬렉션 이름) , {생성할 데이터} )
         // Firestore app에서 생성한 Firestore db와 컬렉션 이름을 적는다.
 
+        /* 1. 내용 */
         content: content, // 입력 받는 내용
-        createAt: new Date()?.toLocaleDateString("ko", {
+        /* 2. createAt */
+        createdAt: new Date()?.toLocaleDateString("ko", {
           // toLocaleDateString까지 넣어줘야 날짜를 인식한다
           hour: "2-digit",
           minute: "2-digit",
           second: "2-digit",
         }),
+        /* 3. 작성자 */
         uid: user?.uid,
+        /* 4. 이메일 */
         email: user?.email,
       });
       setContent("");

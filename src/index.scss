@@ -209,6 +209,17 @@ body {
 
 /* POST */
 .post {
+  &__no-posts {
+    padding: 16px;
+
+    .posts__text {
+      font-size: 14px;
+      border: 1px solid rgb(84, 217, 193);
+      padding: 16px;
+      border-radius: 4px;
+    }
+  }
+
   padding-bottom: 40px;
 
   &__flex {
