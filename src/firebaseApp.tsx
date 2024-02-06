@@ -4,7 +4,7 @@
   getApp - 이미 초기화된 Firebase 앱의 인스턴스를 가져오는 함수
 */
 import { initializeApp, FirebaseApp, getApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore"; // Firestore 데이터베이스
+import { getFirestore } from "firebase/firestore"; // ! Firestore 데이터베이스 : 특정 Firebase 앱과 연결된 Firestore 데이터베이스 인스턴스를 얻기 위해 사용
 
 /* 
   이 부분에서는 app이라는 이름의 변수를 선언하고, 이 변수의 타입을 FirebaseApp으로 설정
@@ -35,6 +35,10 @@ try {
 
 const firebase = initializeApp(firebaseConfig); // try-catch 구문과 관계없이 항상 실행
 
-export const db = getFirestore(app); // Firestore 데이터베이스의 인스턴스를 반환하는 함수
-
+export const db = getFirestore(app); // ! Firestore 데이터베이스의 인스턴스를 반환하는 함수
+// ! db라는 상수를 만들고, 이를 getFirestore 함수를 app 변수와 함께 호출하여 반환된 값으로 설정합니다. 이렇게 함으로써 Firestore 데이터베이스와의 연결이 설정
+// ! 핵심은 getFirestore(app)입니다.
+// ! 이 함수는 app 변수를 인자로 받아와서 해당 앱과 연결된 Firestore 데이터베이스의 인스턴스를 생성합니다.
+// ! 그리고 이 인스턴스를 db라는 상수에 할당함으로써, 이후 코드에서는 db를 사용하여 Firestore 데이터베이스와 상호 작용할 수 있습니다
+// ! 간단히 말하면, db는 Firebase 앱과 연결된 Firestore 데이터베이스를 가리키는 변수이며, 이를 통해 애플리케이션에서 데이터베이스 작업을 수행할 수 있습니다.
 export default firebase;
