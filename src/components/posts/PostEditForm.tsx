@@ -1,40 +1,40 @@
 import AuthContext from "context/AuthContext";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "firebaseApp";
-import { useContext, useState } from "react";
+import { PostProps } from "pages/home";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { FiImage } from "react-icons/fi";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { toast } from "react-toastify";
-export default function PostForm() {
+export default function PostEditForm() {
+  const params = useParams();
+  const [post, setPost] = useState<PostProps | null>(null);
   const [content, setContent] = useState<string>("");
-  const { user } = useContext(AuthContext); // * context 가져오기
+  const navigate = useNavigate();
   const handleFileUpload = () => {};
+
+  const getPost = useCallback(async () => {
+    if (params.id) {
+      const docRef = doc(db, "posts", params.id);
+      const docSnap = await getDoc(docRef);
+      setPost({ ...(docSnap?.data() as PostProps), id: docSnap.id });
+      setContent(docSnap?.data()?.content);
+    }
+  }, [params.id]);
 
   const onSubmit = async (e: any) => {
     e.preventDefault(); // * form이 넘어 가지 않게
 
     try {
-      // db : Firestore 데이터베이스를 나타내는 객체
-      await addDoc(collection(db, "posts"), {
-        //  addDoc(collection(데이터베이스 , 컬렉션 이름) , {생성할 데이터} )
-        // Firestore app에서 생성한 Firestore db와 컬렉션 이름을 적는다.
-
-        /* 1. 내용 */
-        content: content, // 입력 받는 내용
-        /* 2. createAt */
-        createdAt: new Date()?.toLocaleDateString("ko", {
-          // toLocaleDateString까지 넣어줘야 날짜를 인식한다
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        }),
-        /* 3. 작성자 */
-        uid: user?.uid,
-        /* 4. 이메일 */
-        email: user?.email,
-      });
-      setContent("");
-      toast.success(" ✏️ 게시글이 작성되었습니다!");
+      if (post) {
+        const postRef = doc(db, "posts", post?.id);
+        await updateDoc(postRef, {
+          content: content,
+        });
+        navigate(`/posts/${post?.id}`);
+        toast.success("アップデートしました!");
+      }
     } catch (e: any) {
       console.log(e);
     }
@@ -47,6 +47,12 @@ export default function PostForm() {
       setContent(value);
     }
   };
+
+  useEffect(() => {
+    if (params.id) {
+      getPost();
+    }
+  }, []);
 
   return (
     /* POST_FORM */
@@ -77,7 +83,7 @@ export default function PostForm() {
         />
 
         {/* 4. input_submit : Tweet 버튼 */}
-        <input type="submit" value="Tweet" className="post-form__submit-btn" />
+        <input type="submit" value="修正" className="post-form__submit-btn" />
       </div>
     </form>
   );

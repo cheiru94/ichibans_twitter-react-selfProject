@@ -17,55 +17,11 @@ export interface PostProps {
   comments?: any;
 }
 
-const posts: PostProps[] = [
-  {
-    id: "1",
-    email: "test@test.com",
-    content: "내용 입니다.",
-    createdAt: "2024-01-26",
-    uid: "123123",
-  },
-  {
-    id: "2",
-    email: "test@test.com",
-    content: "내용 입니다.",
-    createdAt: "2024-01-26",
-    uid: "123123",
-  },
-  {
-    id: "3",
-    email: "test@test.com",
-    content: "내용 입니다.",
-    createdAt: "2024-01-26",
-    uid: "123123",
-  },
-  {
-    id: "4",
-    email: "test@test.com",
-    content: "내용 입니다.",
-    createdAt: "2024-01-26",
-    uid: "123123",
-  },
-  {
-    id: "5",
-    email: "test@test.com",
-    content: "내용 입니다.",
-    createdAt: "2024-01-26",
-    uid: "123123",
-  },
-  {
-    id: "6",
-    email: "test@test.com",
-    content: "내용 입니다.",
-    createdAt: "2024-01-26",
-    uid: "123123",
-  },
-];
-
 /* 🟢 메인 홈페이지 */
 export default function Homepage() {
   const [posts, setPosts] = useState<PostProps[]>([]);
   const { user } = useContext(AuthContext);
+  console.log("posts: ", posts);
 
   useEffect(() => {
     if (user) {
@@ -76,12 +32,11 @@ export default function Homepage() {
       // ! onSnapshot 함수는 지정된 쿼리의 결과에 대한 실시간 업데이트를 처리하는 이벤트 핸들러를 등록
       // snapShot 매개변수는 해당 쿼리 결과의 스냅샷을 나타냅니다.
       onSnapshot(postsQuery, (snapShot) => {
+        // ! docs 속성은 해당 쿼리 결과로 반환된 문서들의 배열
         let dataObj = snapShot.docs.map((doc) => ({
-          // ! docs 속성은 해당 쿼리 결과로 반환된 문서들의 배열
           ...doc.data(), //! doc.data()는 Firestore 문서에 저장된 모든 필드와 값을 가져오는 메서드
           id: doc?.id, //!  doc?.id를 통해 각 문서의 고유 ID를 새로운 객체에 추가
         }));
-        console.log("dataObj: ", dataObj);
         setPosts(dataObj as PostProps[]);
       });
     }
