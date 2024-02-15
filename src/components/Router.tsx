@@ -48,6 +48,7 @@ export default function Router({ isAuthenticated }: RouterProps) {
           {/* 5. USERS */}
           <Route path="/users/login" element={<LoginPage />} />
           <Route path="/users/signup" element={<SignupPage />} />
+          {/* 6. 로그인 하지않고 다른 경로로 요청할 때  */}
           <Route path="*" element={<Navigate replace to="/users/login" />} />
         </>
       )}
