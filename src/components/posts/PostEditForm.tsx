@@ -1,8 +1,7 @@
-import AuthContext from "context/AuthContext";
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "firebaseApp";
 import { PostProps } from "pages/home";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FiImage } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -18,6 +17,7 @@ export default function PostEditForm() {
     if (params.id) {
       const docRef = doc(db, "posts", params.id);
       const docSnap = await getDoc(docRef);
+      // docSnap만으로는 원하는 데이터를 사용할 수 없기 때문에 .data()를 붙여서 가져오고 싶은 데이터를 불러올 수 있다.
       setPost({ ...(docSnap?.data() as PostProps), id: docSnap.id });
       setContent(docSnap?.data()?.content);
     }
@@ -52,7 +52,7 @@ export default function PostEditForm() {
     if (params.id) {
       getPost();
     }
-  }, []);
+  }, [getPost, params.id]);
 
   return (
     /* POST_FORM */

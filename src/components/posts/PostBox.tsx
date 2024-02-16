@@ -2,7 +2,10 @@ import AuthContext from "context/AuthContext";
 import { PostProps } from "pages/home";
 import { useContext } from "react";
 import { FaCircleUser, FaHeart, FaRegComment } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { doc, deleteDoc } from "firebase/firestore";
+import { db } from "firebaseApp";
+import { toast } from "react-toastify";
 
 interface PostBoxProps {
   post: PostProps;
@@ -10,8 +13,22 @@ interface PostBoxProps {
 
 export default function PostBox({ post }: PostBoxProps) {
   const { user } = useContext(AuthContext); // * context 가져오기
-
-  const handleDelete = () => {};
+  const navigate = useNavigate();
+  const handleDelete = async () => {
+    const confirm = window.confirm("ほんまに消してええんかい?");
+    if (confirm) {
+      try {
+        if (post) {
+          const docRef = doc(db, "posts", post?.id);
+          await deleteDoc(docRef);
+          toast.success("削除しました!");
+          navigate("/");
+        }
+      } catch (e: any) {
+        console.log(e);
+      }
+    }
+  };
   return (
     /* POST BOX */
     <div className="post__box" key={post?.id}>
