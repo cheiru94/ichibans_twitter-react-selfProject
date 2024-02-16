@@ -32,6 +32,7 @@ export default function Homepage() {
       // ! onSnapshot 함수는 지정된 쿼리의 결과에 대한 실시간 업데이트를 처리하는 이벤트 핸들러를 등록
       // snapShot 매개변수는 해당 쿼리 결과의 스냅샷을 나타냅니다.
       onSnapshot(postsQuery, (snapShot) => {
+        console.log("snapShot: ", snapShot);
         // ! docs 속성은 해당 쿼리 결과로 반환된 문서들의 배열
         let dataObj = snapShot.docs.map((doc) => ({
           ...doc.data(), //! doc.data()는 Firestore 문서에 저장된 모든 필드와 값을 가져오는 메서드

@@ -35,7 +35,8 @@ try {
 
 const firebase = initializeApp(firebaseConfig); // try-catch 구문과 관계없이 항상 실행
 
-export const db = getFirestore(app); // ! Firestore 데이터베이스의 인스턴스를 반환하는 함수
+/*  Firestore 데이터베이스의 인스턴스를 반환하는 함수 */
+export const db = getFirestore(app);
 // ! db라는 상수를 만들고, 이를 getFirestore 함수를 app 변수와 함께 호출하여 반환된 값으로 설정합니다. 이렇게 함으로써 Firestore 데이터베이스와의 연결이 설정
 // ! 핵심은 getFirestore(app)입니다.
 // ! 이 함수는 app 변수를 인자로 받아와서 해당 앱과 연결된 Firestore 데이터베이스의 인스턴스를 생성합니다.

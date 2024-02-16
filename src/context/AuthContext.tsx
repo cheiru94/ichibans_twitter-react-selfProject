@@ -18,8 +18,9 @@ export const AuthContextProvider = ({ children }: AuthProps) => {
   const auth = getAuth(app);
 
   useEffect(() => {
-    // 옵저버
+    // onAuthStateChanged(옵저버) : 사용자의 인증 상태가 변경될 때 호출되며, 사용자가 로그인하거나 로그아웃할 때마다 호출
     onAuthStateChanged(auth, (user) => {
+      //  이 함수의 인자로 전달되는 user 값은 현재 인증된 사용자에 대한 정보를 담고 있는 객체
       if (user) {
         setCurrentUser(user);
       } else {
