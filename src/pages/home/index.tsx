@@ -15,6 +15,7 @@ export interface PostProps {
   likes?: number;
   likeCount?: number;
   comments?: any;
+  hashTags: string[];
 }
 
 /* 🟢 메인 홈페이지 */
