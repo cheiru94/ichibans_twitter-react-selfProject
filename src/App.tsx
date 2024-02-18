@@ -15,7 +15,6 @@ import Loader from "components/loader/Loader";
 function App() {
   // app 인스턴스에 연결된 Firebase 인증 서비스의 인스턴스를 가져와 auth 변수에 저장 : app 변수는 Firebase 앱의 인스턴스를 참조
   const auth = getAuth(app); // 🟡 getAuth () : Firebase 인증 서비스에 접근하기 위한 함수
-  console.log("auth: ", auth);
 
   const [init, setInit] = useState<boolean>(false); // 인증 상태의 변경 유무를 알 수 있음
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(

@@ -1,22 +1,61 @@
 import AuthContext from "context/AuthContext";
 import { addDoc, collection } from "firebase/firestore";
-import { db } from "firebaseApp";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { db, storage } from "firebaseApp";
 import { useContext, useState } from "react";
 import { FiImage } from "react-icons/fi";
 
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
+
 export default function PostForm() {
   const [content, setContent] = useState<string>("");
   const [hashTag, setHashTag] = useState<string>("");
+  const [imageFile, setImageFile] = useState<string | null>(""); // URL 인코딩된 데이터
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false); // 이미지를 여러번 업로드 하지 못하게
 
   const [tags, setTags] = useState<string[]>([]);
   const { user } = useContext(AuthContext); // * context 가져오기
-  const handleFileUpload = () => {};
+
+  // 이미지 올리기
+  const handleFileUpload = (e: any) => {
+    // 올린 이미지 파일이 file에 담겨있다.
+    const {
+      target: { files },
+    } = e;
+    const file = files?.[0];
+
+    const fileReader = new FileReader();
+
+    // File이나 Blob을 읽어와서 해당 파일의 데이터를 Data URL로 변환
+    fileReader?.readAsDataURL(file); // 이 데이터는 이후 onloadend 이벤트 핸들러에 의해 자동으로 처리된다.
+
+    fileReader.onloadend = (e: any) => {
+      const { result } = e?.currentTarget; // Data URL이 얻어지고, 이 데이터 URL은
+      setImageFile(result); // setImageFile(result);를 통해 상태인 imageFile에 저장
+    };
+  };
 
   const onSubmit = async (e: any) => {
+    setIsSubmitting(true);
+
+    const key = `${user?.uid}/${uuidv4()}`; // 고유한 키를 생성 :  Firebase Storage에서 이미지를 저장할 경로
+    const storageRef = ref(storage, key); // Firebase Storage에서 이미지를 저장할 참조를 생성
+
     e.preventDefault(); // * form이 넘어 가지 않게
 
     try {
+      // 이미지 먼저 업로드
+      let imageUrl = "";
+
+      // 업로드된 이미지가 있으면
+      if (imageFile) {
+        const data = await uploadString(storageRef, imageFile, "data_url");
+        imageUrl = await getDownloadURL(data?.ref);
+      }
+
+      // 업로드된 이미지의 download url 업데이트
+
       // db : Firestore 데이터베이스를 나타내는 객체
       await addDoc(collection(db, "posts"), {
         //  addDoc(collection(데이터베이스 , 컬렉션 이름) , {생성할 데이터} )
@@ -37,11 +76,15 @@ export default function PostForm() {
         email: user?.email,
         /* 5. 해시태그 */
         hashTags: tags,
+        /* 6. 이미지 Url */
+        imageUrl: imageUrl,
       });
       setTags([]);
       setHashTag("");
       setContent("");
       toast.success(" ✏️ 게시글이 작성되었습니다!");
+      setIsSubmitting(false);
+      setImageFile(null);
     } catch (e: any) {
       console.log(e);
     }
@@ -78,6 +121,10 @@ export default function PostForm() {
     }
   };
 
+  const handleDeleteImage = () => {
+    setImageFile(null); // 인코딩된 url이 저장된 imageFile을 초기화하면 이미지는 사라짐
+  };
+
   return (
     /* POST_FORM */
     <form className="post-form" onSubmit={onSubmit}>
@@ -110,7 +157,7 @@ export default function PostForm() {
           className="post-form__input"
           name="hashtag"
           id="hashtag"
-          placeholder="ハッシュタグ　＋　スペースバー"
+          placeholder="ハッシュタグ + スペースバー"
           onChange={onChangeHashTag}
           onKeyUp={handleKeyUp} // space를 눌렀을 떄로 지정해 놓았다.
           value={hashTag}
@@ -118,22 +165,43 @@ export default function PostForm() {
       </div>
 
       <div className="post-form__submit-area">
-        {/* 2. label : 이미지 추가 아이콘 */}
-        <label htmlFor="file-input" className="post-form__file">
-          <FiImage className="post-form__file-icon" />
-        </label>
+        <div className="post-form__image-area">
+          {/* 2. label : 이미지 추가 아이콘 */}
+          <label htmlFor="file-input" className="post-form__file">
+            <FiImage className="post-form__file-icon" />
+          </label>
 
-        {/* 3. input_file : 이미지 추가 */}
-        <input
-          type="file"
-          name="file-input"
-          accept="image/*"
-          onChange={handleFileUpload}
-          className="hidden"
-        />
+          {/* 3. input_file : 이미지 추가 */}
+          <input
+            type="file"
+            name="file-input"
+            id="file-input"
+            accept="image/*" // 사용자가 파일을 선택할 때 이미지 파일만 선택할 수 있도록 지정
+            onChange={handleFileUpload}
+            className="hidden"
+          />
+
+          {imageFile && (
+            <div className="post-form__attachment">
+              <img src={imageFile} alt="attachment" width={100} height={100} />
+              <button
+                className="post-form__clear-btn"
+                type="button"
+                onClick={handleDeleteImage}
+              >
+                X
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* 4. input_submit : Tweet 버튼 */}
-        <input type="submit" value="Tweet" className="post-form__submit-btn" />
+        <input
+          type="submit"
+          value="Tweet"
+          className="post-form__submit-btn"
+          disabled={isSubmitting} // 이미지는 1개만 업로드 할 수 있게
+        />
       </div>
     </form>
   );

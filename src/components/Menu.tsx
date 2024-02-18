@@ -12,7 +12,6 @@ import { toast } from "react-toastify";
 
 export default function MenuList() {
   const { user } = useContext(AuthContext); // 🟡  useContext로 user받아 쓰기
-  console.log("user: ", user);
 
   const navigate = useNavigate();
 

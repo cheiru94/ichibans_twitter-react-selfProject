@@ -183,6 +183,33 @@ body {
 }
 
 .post-form {
+  &__image-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__attachment {
+    display: flex;
+    align-items: start;
+    gap: 16px;
+    position: relative;
+  }
+
+  &__clear-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    @extend .button;
+    padding: 0.2rem 0.65rem;
+    background-color: $danger;
+
+    &:hover,
+    &:focus {
+      background-color: $dangerDark;
+    }
+  }
+
   &__input {
     font-family: $font;
     padding: 8px;
@@ -243,6 +270,7 @@ body {
     padding: 0.75rem 1rem;
     justify-content: space-between;
     border-bottom: 1px solid $border;
+    align-items: center;
 
     // 이거는 post-form의 직계 자식이 아니기 때문에 &를 쓸 수 없다.
     .post-form__file {
@@ -270,6 +298,10 @@ body {
 
 /* POST */
 .post {
+  &__image-div {
+    padding: 17px;
+  }
+
   &__header {
     button {
       border: none;
