@@ -3,6 +3,7 @@ import { CiHome } from "react-icons/ci";
 import { CiUser } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
 import { IoLogInSharp } from "react-icons/io5";
+import { MdOutlineSearch } from "react-icons/md";
 import { useContext } from "react";
 import AuthContext from "context/AuthContext";
 import { getAuth, signOut } from "firebase/auth"; // 로그아웃
@@ -29,15 +30,20 @@ export default function MenuList() {
           <CiUser className="footer__icon" /> Profile
         </button>
 
-        {/* 3. 로그인 상태 : user의 유무에 따른 메뉴 로그인 버튼 상태 처리 */}
+        {/* 3. 찾기 */}
+        <button type="button" onClick={() => navigate("/search")}>
+          <MdOutlineSearch className="footer__icon" /> Search
+        </button>
+
+        {/* 4. 로그인 상태 : user의 유무에 따른 메뉴 로그인 버튼 상태 처리 */}
         {user === null ? (
-          // 3.1. Login 표시
+          // 4.1. Login 표시
           <button type="button" onClick={() => navigate("/users/login")}>
             <IoLogInSharp className="footer__icon" />
             Login
           </button>
         ) : (
-          // 3.2. Logout 표시　 : 로그 아웃처리
+          // 4.2. Logout 표시　 : 로그 아웃처리
           <button
             type="button"
             onClick={async () => {
