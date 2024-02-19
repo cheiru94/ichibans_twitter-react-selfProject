@@ -41,8 +41,6 @@ body {
   border-left: 1px solid $border;
   border-right: 1px solid $border;
   min-height: 100vh;
-  // border-left: 1px solid $border;
-  // border-right: 1px solid $border;
 }
 .button {
   padding: 0.2rem 0.8rem;
@@ -129,7 +127,7 @@ body {
     border-radius: 20px;
     margin-bottom: 20px;
     padding: 10px !important;
-    width: 80% !important;
+    width: 90% !important;
     font-size: 18px;
     font-weight: 600;
 
@@ -146,7 +144,22 @@ body {
   &__top {
     @extend .transparent;
     @extend .sticky;
+
+    .profile {
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
+      border-radius: 50%;
+      margin-bottom: 20px;
+
+      margin-bottom: 20px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
+
   &__title {
     background-color: transparent;
     width: 90%;
@@ -157,13 +170,12 @@ body {
   &__tabs {
     background-color: transparent;
     width: 100%;
-    width: 100%;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   &__tab {
     background-color: transparent;
-    width: 100%;
+    // width: 100%; // 여기를 100 하니 삐져나감
     text-align: center;
     font-weight: 500;
     padding: 16px;
@@ -197,7 +209,7 @@ body {
   }
 
   &__clear-btn {
-    position: absolute;
+    // position: absolute;
     top: 5px;
     right: 5px;
     @extend .button;
@@ -351,7 +363,6 @@ body {
     &-profile {
       text-decoration: none;
       padding: 0px 10px;
-
       // 1, 유저 이미지
       &-img,
       &-icon {

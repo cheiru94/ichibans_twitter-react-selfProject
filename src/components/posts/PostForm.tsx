@@ -2,7 +2,7 @@ import AuthContext from "context/AuthContext";
 import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { db, storage } from "firebaseApp";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FiImage } from "react-icons/fi";
 
 import { toast } from "react-toastify";
@@ -46,12 +46,12 @@ export default function PostForm() {
 
     try {
       // 이미지 먼저 업로드
-      let imageUrl = "";
+      let imageFile = "";
 
       // 업로드된 이미지가 있으면
       if (imageFile) {
         const data = await uploadString(storageRef, imageFile, "data_url");
-        imageUrl = await getDownloadURL(data?.ref);
+        imageFile = await getDownloadURL(data?.ref);
       }
 
       // 업로드된 이미지의 download url 업데이트
@@ -77,7 +77,7 @@ export default function PostForm() {
         /* 5. 해시태그 */
         hashTags: tags,
         /* 6. 이미지 Url */
-        imageUrl: imageUrl,
+        imageFile: imageFile,
       });
       setTags([]);
       setHashTag("");

@@ -45,6 +45,7 @@ export const db = getFirestore(app);
 // ! 그리고 이 인스턴스를 db라는 상수에 할당함으로써, 이후 코드에서는 db를 사용하여 Firestore 데이터베이스와 상호 작용할 수 있습니다
 // ! 간단히 말하면, db는 Firebase 앱과 연결된 Firestore 데이터베이스를 가리키는 변수이며, 이를 통해 애플리케이션에서 데이터베이스 작업을 수행할 수 있습니다.
 
+/*  Firestorage*/
 export const storage = getStorage(app); /// 제공된 앱 인스턴스와 관련된 Firebase Storage 서비스에 대한 참조를 생성하고 반환
 /// 이 내보내기가 다른 모듈이나 파일에서 사용 가능해지면, storage 상수를 사용하여 Firebase Storage와 상호 작용할 수 있습니다.
 
