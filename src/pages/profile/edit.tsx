@@ -34,45 +34,51 @@ export default function ProfileEdit() {
   };
 
   const onSubmit = async (e: any) => {
-    let key = `${user?.uid}/${uuidv4()}`;
-    const storageRef = ref(storage, key);
+    /* 현재 사용자의 UID와 UUID를 조합하여 고유한 경로를 생성 */
+    //  이미지 삭제와 업로드를 하기 위해 storageRef가 필요
+    let key = `${user?.uid}/${uuidv4()}`; // Firebase Storage에서 파일을 저장할 경로를 생성
+    const storageRef = ref(storage, key); //  Firebase Storage에서 파일을 참조하기 위한 참조(Reference)를 생성 : storage는 Firebase Storage의 인스턴스를 나타내며, key는 위에서 생성한 파일 경로
+    // 이렇게 생성된 storageRef를 사용하면 해당 경로에 파일을 저장하거나 해당 파일을 읽어올 수 있다.
+
     let newImageUrl = null;
 
     e.preventDefault();
 
     try {
-      // １。기존 유저 이미지가 Firebase Storage 이미지일 경우에만 삭제
+      // 기존 사진 지우고 새로운 사진 업로드
       if (
         user?.photoURL &&
         user?.photoURL?.includes(STORAGE_DOWNLOAD_URL_STR)
       ) {
+        // 🟡  기존 이미지가 있다면, 해당 이미지를 삭제
         const imageRef = ref(storage, user?.photoURL);
         if (imageRef) {
+          //  Firebase Storage에서 파일을 삭제
           await deleteObject(imageRef).catch((error) => {
             console.log(error);
           });
         }
-      }
 
-      // ２。이미지 업로드
-      if (imageUrl) {
-        const data = await uploadString(storageRef, imageUrl, "data_url");
-        newImageUrl = await getDownloadURL(data?.ref);
-      }
+        // 🟡  새로운 파일 있다면 업로드
+        if (imageUrl) {
+          const data = await uploadString(storageRef, imageUrl, "data_url"); // 문자열을 Firebase Storage에 업로드, 데이터 URL 형식의 이미지 파일을 업로드
+          newImageUrl = await getDownloadURL(data?.ref); // 업로드된 파일의 다운로드 URL가져오기
+        }
 
-      // ３。updateProfile 호출
-      if (user) {
-        await updateProfile(user, {
-          displayName: displayName || "",
-          photoURL: newImageUrl || "",
-        })
-          .then(() => {
-            toast.success("プロフィールが更新されました。");
-            navigate("/profile");
+        // ３。updateProfile 호출
+        if (user) {
+          await updateProfile(user, {
+            displayName: displayName || "",
+            photoURL: newImageUrl || "",
           })
-          .catch((error) => {
-            console.log(error);
-          });
+            .then(() => {
+              toast.success("プロフィールが更新されました。");
+              navigate("/profile");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
       }
     } catch (e: any) {
       console.log(e);
