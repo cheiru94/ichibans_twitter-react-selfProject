@@ -9,7 +9,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <>
-    {/* 서비스 프로바이더 : onAuthStateChanged (currentUser)공유*/}
+    {/* 서비스 프로바이더 : onAuthStateChanged (currentUser)공유 [App 전체를 감싸서 공유하고 있다]*/}
     <AuthContextProvider>
       <BrowserRouter>
         <App />
