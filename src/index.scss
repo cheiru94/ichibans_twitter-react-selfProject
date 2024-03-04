@@ -195,6 +195,23 @@ body {
 }
 
 .post-form {
+  &__profile {
+    padding: 16px;
+
+    .post-form__input {
+      border-bottom: 1px solid $activeBorder;
+      padding: 8px 2px;
+      font-size: 20px;
+      width: 100%;
+      margin-bottom: 30px;
+
+      &:active,
+      &:focus {
+        border-bottom: 1px solid $primaryColor;
+      }
+    }
+  }
+
   &__image-area {
     display: flex;
     align-items: center;

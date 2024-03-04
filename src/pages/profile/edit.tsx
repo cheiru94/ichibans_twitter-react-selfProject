@@ -45,20 +45,21 @@ export default function ProfileEdit() {
     e.preventDefault();
 
     try {
-      // // 기존 사진 지우고 새로운 사진 업로드
-      // if (
-      //   user?.photoURL &&
-      //   user?.photoURL?.includes(STORAGE_DOWNLOAD_URL_STR)
-      // ) {
-      //   // 🟡  기존 이미지가 있다면, 해당 이미지를 삭제
-      //   const imageRef = ref(storage, user?.photoURL);
-      //   if (imageRef) {
-      //     //  Firebase Storage에서 파일을 삭제
-      //     await deleteObject(imageRef).catch((error) => {
-      //       console.log(error);
-      //     });
-      //   }
-      // }
+      // 기존 사진 지우고 새로운 사진 업로드 -> 이전에 올려놓은 이미지에는 photoURL에 imageUrl이라는 필드가 없어서, 이미지를 삭제하려 해도 삭제가 안되더라..;;;
+      // -> imageUrl이라는은 STORAGE_DOWNLOAD_URL_STR 변수안에 있는 부분이 공통적으로 들어가, 이부분을 포함하면 지워라 하니 지워진다
+      if (
+        user?.photoURL &&
+        user?.photoURL?.includes(STORAGE_DOWNLOAD_URL_STR)
+      ) {
+        // 🟡  기존 유저 이미지가 파이어베이스의 Storage의 이미지라면 ( 이전에 내가 올린 이미지라면 ), 해당 이미지를 삭제
+        const imageRef = ref(storage, user?.photoURL);
+        if (imageRef) {
+          //  Firebase Storage에서 파일을 삭제
+          await deleteObject(imageRef).catch((error) => {
+            console.log(error);
+          });
+        }
+      }
 
       // 🟡  새로운 파일 있다면 업로드
       if (imageUrl) {
