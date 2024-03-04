@@ -58,7 +58,7 @@ export default function ProfilePage() {
           className="profile__btn"
           onClick={() => navigate("/profile/edit")}
         >
-          ポロファイルを編集
+          Profileを編集
         </button>
 
         <div className="profile__text">

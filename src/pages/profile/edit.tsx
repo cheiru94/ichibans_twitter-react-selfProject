@@ -13,6 +13,7 @@ import { updateProfile } from "firebase/auth";
 
 import { v4 as uuidv4 } from "uuid";
 import { storage } from "firebaseApp";
+
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -21,9 +22,8 @@ const STORAGE_DOWNLOAD_URL_STR = "https://firebasestorage.googleapis.com";
 export default function ProfileEdit() {
   const [displayName, setDisplayName] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-  // const t = useTranslation();
+  const navigate = useNavigate();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -45,40 +45,40 @@ export default function ProfileEdit() {
     e.preventDefault();
 
     try {
-      // 기존 사진 지우고 새로운 사진 업로드
-      if (
-        user?.photoURL &&
-        user?.photoURL?.includes(STORAGE_DOWNLOAD_URL_STR)
-      ) {
-        // 🟡  기존 이미지가 있다면, 해당 이미지를 삭제
-        const imageRef = ref(storage, user?.photoURL);
-        if (imageRef) {
-          //  Firebase Storage에서 파일을 삭제
-          await deleteObject(imageRef).catch((error) => {
+      // // 기존 사진 지우고 새로운 사진 업로드
+      // if (
+      //   user?.photoURL &&
+      //   user?.photoURL?.includes(STORAGE_DOWNLOAD_URL_STR)
+      // ) {
+      //   // 🟡  기존 이미지가 있다면, 해당 이미지를 삭제
+      //   const imageRef = ref(storage, user?.photoURL);
+      //   if (imageRef) {
+      //     //  Firebase Storage에서 파일을 삭제
+      //     await deleteObject(imageRef).catch((error) => {
+      //       console.log(error);
+      //     });
+      //   }
+      // }
+
+      // 🟡  새로운 파일 있다면 업로드
+      if (imageUrl) {
+        const data = await uploadString(storageRef, imageUrl, "data_url"); // 문자열을 Firebase Storage에 업로드, 데이터 URL 형식의 이미지 파일을 업로드
+        newImageUrl = await getDownloadURL(data?.ref); // 업로드된 파일의 다운로드 URL가져오기
+      }
+
+      // ３。updateProfile 호출
+      if (user) {
+        await updateProfile(user, {
+          displayName: displayName || "",
+          photoURL: newImageUrl || "",
+        })
+          .then(() => {
+            toast.success("プロフィールが更新されました。");
+            navigate("/profile");
+          })
+          .catch((error) => {
             console.log(error);
           });
-        }
-
-        // 🟡  새로운 파일 있다면 업로드
-        if (imageUrl) {
-          const data = await uploadString(storageRef, imageUrl, "data_url"); // 문자열을 Firebase Storage에 업로드, 데이터 URL 형식의 이미지 파일을 업로드
-          newImageUrl = await getDownloadURL(data?.ref); // 업로드된 파일의 다운로드 URL가져오기
-        }
-
-        // ３。updateProfile 호출
-        if (user) {
-          await updateProfile(user, {
-            displayName: displayName || "",
-            photoURL: newImageUrl || "",
-          })
-            .then(() => {
-              toast.success("プロフィールが更新されました。");
-              navigate("/profile");
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }
       }
     } catch (e: any) {
       console.log(e);
@@ -121,7 +121,7 @@ export default function ProfileEdit() {
             type="text"
             name="displayName"
             className="post-form__input"
-            // placeholder={t("NAME_PLACEHOLDER")}
+            placeholder={"名前"}
             onChange={onChange}
             value={displayName}
           />
@@ -133,7 +133,7 @@ export default function ProfileEdit() {
                 onClick={handleDeleteImage}
                 className="post-form__clear-btn"
               >
-                x{/* {t("BUTTON_DELETE")} */}
+                x
               </button>
             </div>
           )}
@@ -156,6 +156,7 @@ export default function ProfileEdit() {
               type="submit"
               // value={t("BUTTON_EDIT_PROFILE")}
               className="post-form__submit-btn"
+              value={"変更する"}
             />
           </div>
         </div>
