@@ -2,8 +2,15 @@ import AuthContext from "context/AuthContext";
 import { PostProps } from "pages/home";
 import { useContext } from "react";
 import { FaCircleUser, FaHeart, FaRegComment } from "react-icons/fa6";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
-import { doc, deleteDoc } from "firebase/firestore";
+import {
+  doc,
+  deleteDoc,
+  updateDoc,
+  arrayRemove,
+  arrayUnion,
+} from "firebase/firestore";
 import { db } from "firebaseApp";
 import { toast } from "react-toastify";
 
@@ -29,6 +36,26 @@ export default function PostBox({ post }: PostBoxProps) {
       }
     }
   };
+
+  // 좋아요 토굴
+  const toggleLike = async () => {
+    const postRef = doc(db, "posts", post?.id);
+
+    if (user?.uid && post?.likes?.includes(user?.uid)) {
+      // 좋아요를 이미 눌렀을 경우 -> 좋아요 취소
+      await updateDoc(postRef, {
+        likes: arrayRemove(user?.uid), // 현재 로그인 한 계정의 uid를 삭제
+        likeCount: post?.likeCount ? post?.likeCount - 1 : 0, // 기존 값이 있으면 -1 , 없으면 그대로 0
+      });
+    } else {
+      // 좋아요를 안 눌렀을 경우 -> 좋아요
+      await updateDoc(postRef, {
+        likes: arrayUnion(user?.uid), // 현재 로그인 한 계정의 uid를 추가
+        likeCount: post?.likeCount ? post?.likeCount + 1 : 1, // 기존 값이 있으면 +1 , 없으면 1
+      });
+    }
+  };
+
   return (
     /* POST BOX */
     <div className="post__box" key={post?.id}>
@@ -103,8 +130,13 @@ export default function PostBox({ post }: PostBoxProps) {
         )}
 
         {/* 3.3 하트*/}
-        <button type="button" className="post__likes">
-          <FaHeart />
+        <button type="button" className="post__likes" onClick={toggleLike}>
+          {/* 유저가 있고, post likes에 해당 user의 uid가 있으면 색칠 하트 */}
+          {user && post?.likes?.includes(user?.uid) ? (
+            <AiFillHeart />
+          ) : (
+            <AiOutlineHeart />
+          )}
           {post?.likeCount || 0}
         </button>
         {/* 3.4 코맨트 */}

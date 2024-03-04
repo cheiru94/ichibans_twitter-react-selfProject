@@ -12,7 +12,7 @@ export interface PostProps {
   createdAt: string;
   uid: string;
   profileUrl?: string;
-  likes?: number;
+  likes?: string[];
   likeCount?: number;
   comments?: any;
   hashTags: string[];

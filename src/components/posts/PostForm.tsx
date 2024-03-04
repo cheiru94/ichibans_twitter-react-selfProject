@@ -46,12 +46,12 @@ export default function PostForm() {
 
     try {
       // 이미지 먼저 업로드
-      let imageFile = "";
+      let imageUrl = "";
 
       // 업로드된 이미지가 있으면
       if (imageFile) {
         const data = await uploadString(storageRef, imageFile, "data_url");
-        imageFile = await getDownloadURL(data?.ref);
+        imageUrl = await getDownloadURL(data?.ref);
       }
 
       // 업로드된 이미지의 download url 업데이트
@@ -77,7 +77,7 @@ export default function PostForm() {
         /* 5. 해시태그 */
         hashTags: tags,
         /* 6. 이미지 Url */
-        imageFile: imageFile,
+        imageUrl: imageUrl,
       });
       setTags([]);
       setHashTag("");
