@@ -6,6 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "firebaseApp";
 import { IoMdArrowBack } from "react-icons/io";
+import CommentForm from "components/comments/CommentForm";
 
 export default function PostDetail() {
   const [post, setPost] = useState<PostProps | null>(null);
@@ -37,7 +38,14 @@ export default function PostDetail() {
           <IoMdArrowBack />
         </button>
       </div>
-      {post ? <PostBox post={post} /> : <Loader />}
+      {post ? (
+        <>
+          <PostBox post={post} />
+          <CommentForm post={post} />{" "}
+        </>
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 }
