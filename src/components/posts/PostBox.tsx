@@ -14,6 +14,7 @@ import {
 import { db } from "firebaseApp";
 import { toast } from "react-toastify";
 import FollowingBox from "components/following/FollowingBox";
+import useTranslation from "hooks/useTranslation";
 
 interface PostBoxProps {
   post: PostProps;
@@ -21,6 +22,8 @@ interface PostBoxProps {
 
 export default function PostBox({ post }: PostBoxProps) {
   const { user } = useContext(AuthContext); // * context 가져오기
+  const t = useTranslation();
+
   const navigate = useNavigate();
   const handleDelete = async () => {
     const confirm = window.confirm("ほんまに消してええんかい?");
@@ -124,11 +127,11 @@ export default function PostBox({ post }: PostBoxProps) {
               className="post__delete"
               onClick={handleDelete}
             >
-              Delete
+              {t("BUTTON_DELETE")}
             </button>
             {/* 3.2 Edit */}
             <button type="button" className="post__edit">
-              <Link to={`/posts/edit/${post.id}`}>Edit</Link>
+              <Link to={`/posts/edit/${post.id}`}>{t("BUTTON_EDIT")}</Link>
             </button>
           </>
         )}

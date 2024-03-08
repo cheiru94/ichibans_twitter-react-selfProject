@@ -1,3 +1,4 @@
+import { languageState } from "atom";
 import PostBox from "components/posts/PostBox";
 import AuthContext from "context/AuthContext";
 import {
@@ -11,6 +12,7 @@ import { db } from "firebaseApp";
 import { PostProps } from "pages/home";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 
 type TabType = "my" | "like";
 
@@ -22,6 +24,9 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const PROFILE_DEFAULT_URL = "/tiger.png";
+
+  const [language, setLanguage] = useRecoilState(languageState);
+  console.log("lang: ", language);
 
   useEffect(() => {
     if (user) {
@@ -60,6 +65,11 @@ export default function ProfilePage() {
     }
   }, [user]);
 
+  const onClickLanguage = () => {
+    setLanguage(language === "ko" ? "jp" : "ko");
+    localStorage.setItem("language", language === "ko" ? "jp" : "ko");
+  };
+
   return (
     <div className="home">
       <div className="home__top">
@@ -76,13 +86,23 @@ export default function ProfilePage() {
             height={100}
           />
         </div>
-        <button
-          type="button"
-          className="profile__btn"
-          onClick={() => navigate("/profile/edit")}
-        >
-          Profileを編集
-        </button>
+
+        <div className="profile__flex">
+          <button
+            type="button"
+            className="profile__btn--language"
+            onClick={() => navigate("/profile/edit")}
+          >
+            Profileを編集
+          </button>
+          <button
+            type="button"
+            className="profile__btn"
+            onClick={onClickLanguage}
+          >
+            {language === "ko" ? "한국어" : "日本語"}
+          </button>
+        </div>
 
         <div className="profile__text">
           <div className="profile__name">{user?.displayName || "利用者"}</div>
@@ -95,7 +115,7 @@ export default function ProfilePage() {
             className={`home__tab ${activeTab === "my" && "home__tab--active"}`}
             onClick={() => setActiveTab("my")}
           >
-            アナタ
+            For you
           </div>
           <div
             className={`home__tab ${
@@ -103,7 +123,7 @@ export default function ProfilePage() {
             }`}
             onClick={() => setActiveTab("like")}
           >
-            いいね
+            Likes
           </div>
         </div>
 

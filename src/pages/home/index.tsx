@@ -11,6 +11,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "firebaseApp";
+import useTranslation from "hooks/useTranslation";
 
 export interface PostProps {
   id: string;
@@ -39,6 +40,7 @@ export default function Homepage() {
   const [activeTab, setActiveTab] = useState<tabType>("all");
   const [followingPosts, setFollowingPosts] = useState<PostProps[]>([]);
   const [followingIds, setFollowingIds] = useState<string[]>([""]);
+  const t = useTranslation();
   console.log("followingIds: ", followingIds);
 
   // 실시간 동기화로 user의 팔로잉 id 배열 가져오기
@@ -97,7 +99,7 @@ export default function Homepage() {
     <div className="home">
       <div className="home__top">
         {/* 1. HOME TITLE */}
-        <div className="home__title">Home</div>
+        <div className="home__title">{t("MENU_HOME")}</div>
         {/* 2. HOME TABS :  アナタへ | フォロー */}
         <div className="home__tabs">
           <div
@@ -106,7 +108,7 @@ export default function Homepage() {
             }`}
             onClick={() => setActiveTab("all")}
           >
-            All
+            {t("TAB_ALL")}
           </div>
           <div
             className={`home__tab ${
@@ -114,7 +116,7 @@ export default function Homepage() {
             }`}
             onClick={() => setActiveTab("following")}
           >
-            following
+            {t("TAB_FOLLOWING")}
           </div>
         </div>
       </div>
@@ -129,7 +131,7 @@ export default function Homepage() {
             posts?.map((post) => <PostBox post={post} key={post.id} />)
           ) : (
             <div className="post__no-posts">
-              <div className="post__text">ありません</div>
+              <div className="post__text">{t("NO_POSTS")}</div>
             </div>
           )}
         </div>
@@ -140,7 +142,7 @@ export default function Homepage() {
             followingPosts?.map((post) => <PostBox post={post} key={post.id} />)
           ) : (
             <div className="post__no-posts">
-              <div className="post__text">ありません</div>
+              <div className="post__text">{t("NO_POSTS")}</div>
             </div>
           )}
         </div>

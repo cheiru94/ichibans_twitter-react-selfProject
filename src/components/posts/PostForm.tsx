@@ -7,6 +7,7 @@ import { FiImage } from "react-icons/fi";
 
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
+import useTranslation from "hooks/useTranslation";
 
 export default function PostForm() {
   const [content, setContent] = useState<string>("");
@@ -16,6 +17,7 @@ export default function PostForm() {
 
   const [tags, setTags] = useState<string[]>([]);
   const { user } = useContext(AuthContext); // * context 가져오기
+  const t = useTranslation();
 
   // 이미지 올리기
   const handleFileUpload = (e: any) => {
@@ -134,7 +136,7 @@ export default function PostForm() {
         required
         name="content"
         id="content"
-        placeholder="何が起こっているの?"
+        placeholder={t("POST_PLACEHOLDER")}
         onChange={onChange}
         value={content}
       />
@@ -157,7 +159,7 @@ export default function PostForm() {
           className="post-form__input"
           name="hashtag"
           id="hashtag"
-          placeholder="ハッシュタグ + スペースバー"
+          placeholder={t("POST_HASHTAG")}
           onChange={onChangeHashTag}
           onKeyUp={handleKeyUp} // space를 눌렀을 떄로 지정해 놓았다.
           value={hashTag}
@@ -189,7 +191,7 @@ export default function PostForm() {
                 type="button"
                 onClick={handleDeleteImage}
               >
-                X
+                {t("BUTTON_DELETE")}
               </button>
             </div>
           )}

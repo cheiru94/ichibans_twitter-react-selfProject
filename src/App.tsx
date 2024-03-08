@@ -11,6 +11,7 @@ import { app } from "firebaseApp";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "components/loader/Loader";
+import { RecoilRoot } from "recoil";
 
 function App() {
   // app 인스턴스에 연결된 Firebase 인증 서비스의 인스턴스를 가져와 auth 변수에 저장 : app 변수는 Firebase 앱의 인스턴스를 참조
@@ -43,17 +44,19 @@ function App() {
 
   return (
     /* Layout으로 Router를 감싸면서 모든 페이지에 적용 */
-    <Layout>
-      <ToastContainer
-        theme="dark" // 테마
-        autoClose={1000} // 실행 시간
-        hideProgressBar // 진행바 숨기기
-        newestOnTop // 가장 최신게 위로
-      />
+    <RecoilRoot>
+      <Layout>
+        <ToastContainer
+          theme="dark" // 테마
+          autoClose={1000} // 실행 시간
+          hideProgressBar // 진행바 숨기기
+          newestOnTop // 가장 최신게 위로
+        />
 
-      {/* init이 되었을 경우에만 Router 표시 , isAuthenticated에는 사용자 로그인 유무에 따라 라우터에서 보여주는 내용이 다르다. */}
-      {init ? <Router isAuthenticated={isAuthenticated} /> : <Loader />}
-    </Layout>
+        {/* init이 되었을 경우에만 Router 표시 , isAuthenticated에는 사용자 로그인 유무에 따라 라우터에서 보여주는 내용이 다르다. */}
+        {init ? <Router isAuthenticated={isAuthenticated} /> : <Loader />}
+      </Layout>
+    </RecoilRoot>
   );
 }
 

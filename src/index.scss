@@ -160,8 +160,13 @@ body {
       overflow: hidden;
       border-radius: 50%;
       margin-bottom: 20px;
-
       margin-bottom: 20px;
+
+      &__flex {
+        display: flex;
+        gap: 8px;
+      }
+
       img {
         width: 100%;
         height: 100%;
@@ -606,20 +611,17 @@ body {
 
   &__btn {
     @extend .button;
-    background-color: $primaryColor;
-
+    background-color: $gray;
     &:hover,
     &:focus {
-      background-color: $activeBorder;
+      background-color: $grayDark;
     }
-
     &--language {
       @extend .button;
-      background-color: $gray;
-
+      background-color: $primaryColor;
       &:hover,
       &:focus {
-        background-color: $grayDark;
+        background-color: $activeBorder;
       }
     }
   }
