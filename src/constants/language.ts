@@ -43,7 +43,7 @@ const TRANSLATIONS = {
   },
   BUTTON_DELETE: {
     ko: "삭제",
-    jp: "編集",
+    jp: "削除",
   },
   BUTTON_EDIT_PROFILE: {
     ko: "프로필 수정",
