@@ -1,7 +1,7 @@
 import AuthContext from "context/AuthContext";
 import { PostProps } from "pages/home";
 import { useContext } from "react";
-import { FaCircleUser, FaHeart, FaRegComment } from "react-icons/fa6";
+import { FaRegComment, FaUserCircle } from "react-icons/fa";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { db } from "firebaseApp";
 import { toast } from "react-toastify";
+import FollowingBox from "components/following/FollowingBox";
 
 interface PostBoxProps {
   post: PostProps;
@@ -60,29 +61,32 @@ export default function PostBox({ post }: PostBoxProps) {
     /* POST BOX */
     <div className="post__box" key={post?.id}>
       {/* 각 POST 마다 해당 id값의 링크 연결 */}
-      <Link to={`/posts/${post?.id}`}>
-        {/* 프로필 전체를 감싸는 div */}
-        <div className="post__box-profile">
-          {/* 1. flex되는 부분 */}
-          <div className="post__flex">
-            {post.profileUrl ? (
-              /* 1.1. 유저 이미지  */
-              <img
-                src={post?.profileUrl}
-                alt="profile"
-                className="post__box-profile-img"
-              />
-            ) : (
-              <FaCircleUser className="post__box-profile-icon" />
-            )}
-            {/* 1.2. 이메일 */}
-            <div className="post__email">{post?.email}</div>
-            {/* 1.3. 날짜 */}
-            <div className="post__createdAt">{post?.createdAt}</div>
-          </div>
 
-          {/* 2. 내용 */}
-          {/* 2.1. content */}
+      {/* 프로필 전체를 감싸는 div */}
+      <div className="post__box-profile">
+        {/* 1. flex되는 부분 */}
+        <div className="post__flex">
+          {post?.profileUrl ? (
+            <img
+              src={post?.profileUrl}
+              alt="profile"
+              className="post__box-profile-img"
+            />
+          ) : (
+            <FaUserCircle className="post__box-profile-icon" />
+          )}
+          <div className="post__flex--between">
+            <div className="post__flex">
+              <div className="post__email">{post?.email}</div>
+              <div className="post__createdAt">{post?.createdAt}</div>
+            </div>
+            <FollowingBox post={post} />
+          </div>
+        </div>
+
+        {/* 2. 내용 */}
+        {/* 2.1. content */}
+        <Link to={`/posts/${post?.id}`}>
           <div className="post__box-content">{post?.content}</div>
 
           {/* 이미지 */}
@@ -106,8 +110,8 @@ export default function PostBox({ post }: PostBoxProps) {
               </span>
             ))}
           </div>
-        </div>
-      </Link>
+        </Link>
+      </div>
 
       {/* 3. post footer */}
       {/* post.uid === user.uid 일 떄 */}

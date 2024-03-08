@@ -1,8 +1,15 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import PostForm from "components/posts/PostForm";
 import PostBox from "components/posts/PostBox";
 import AuthContext from "context/AuthContext";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "firebaseApp";
 
 export interface PostProps {
@@ -19,16 +26,46 @@ export interface PostProps {
   imageUrl?: string;
 }
 
+interface UserProps {
+  id: string;
+}
+
+type tabType = "all" | "following";
+
 /* 🟢 메인 홈페이지 */
 export default function Homepage() {
   const [posts, setPosts] = useState<PostProps[]>([]);
   const { user } = useContext(AuthContext);
+  const [activeTab, setActiveTab] = useState<tabType>("all");
+  const [followingPosts, setFollowingPosts] = useState<PostProps[]>([]);
+  const [followingIds, setFollowingIds] = useState<string[]>([""]);
+  console.log("followingIds: ", followingIds);
+
+  // 실시간 동기화로 user의 팔로잉 id 배열 가져오기
+  const getFollowingIds = useCallback(async () => {
+    if (user?.uid) {
+      const ref = doc(db, "following", user?.uid);
+      onSnapshot(ref, (doc) => {
+        // 가져오기전 내용 초기화
+        setFollowingIds([""]);
+        doc?.data()?.users?.map((user: UserProps) =>
+          /* 이전 값이 있는 경우 새로운 값을 추가 아니면 빈배열로   */
+          setFollowingIds((prev: string[]) => (prev ? [...prev, user?.id] : []))
+        );
+      });
+    }
+  }, [user?.uid]);
 
   useEffect(() => {
     if (user) {
       // ! post 컬렉션을 참조
       let postsRef = collection(db, "posts"); // !  Firestore에서 posts 컬렉션을 참조  / db는 Firebase에서 초기화한 Firestore 인스턴스
       let postsQuery = query(postsRef, orderBy("createdAt", "desc"));
+      let followingQuery = query(
+        postsRef,
+        where("uid", "in", followingIds),
+        orderBy("createdAt", "desc")
+      );
 
       // ! onSnapshot 함수는 지정된 쿼리의 결과에 대한 실시간 업데이트를 처리하는 이벤트 핸들러를 등록
       // snapShot 매개변수는 해당 쿼리 결과의 스냅샷을 나타냅니다.
@@ -40,19 +77,45 @@ export default function Homepage() {
         }));
         setPosts(dataObj as PostProps[]);
       });
+
+      onSnapshot(followingQuery, (snapShot) => {
+        let dataObj = snapShot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc?.id,
+        }));
+        setFollowingPosts(dataObj as PostProps[]);
+      });
     }
-  }, [user]);
+  }, [followingIds, user]);
+
+  useEffect(() => {
+    if (user?.uid) getFollowingIds();
+  }, [getFollowingIds, user?.uid]);
 
   return (
     /* HOME */
     <div className="home">
       <div className="home__top">
         {/* 1. HOME TITLE */}
-        <div className="home__title">ホーム</div>
+        <div className="home__title">Home</div>
         {/* 2. HOME TABS :  アナタへ | フォロー */}
         <div className="home__tabs">
-          <div className="home__tab home__tab--active">アナタへ</div>
-          <div className="home__tab">フォロー</div>
+          <div
+            className={`home__tab ${
+              activeTab === "all" && "home__tab--active"
+            }`}
+            onClick={() => setActiveTab("all")}
+          >
+            All
+          </div>
+          <div
+            className={`home__tab ${
+              activeTab === "following" && "home__tab--active"
+            }`}
+            onClick={() => setActiveTab("following")}
+          >
+            following
+          </div>
         </div>
       </div>
 
@@ -60,15 +123,28 @@ export default function Homepage() {
       <PostForm />
 
       {/* 4. TWEET FORM 태그 */}
-      <div className="post">
-        {posts?.length > 0 ? (
-          posts?.map((post) => <PostBox post={post} key={post.id} />)
-        ) : (
-          <div className="post__no-posts">
-            <div className="posts__text">まだ投稿がありません</div>
-          </div>
-        )}
-      </div>
+      {activeTab === "all" && (
+        <div className="post">
+          {posts?.length > 0 ? (
+            posts?.map((post) => <PostBox post={post} key={post.id} />)
+          ) : (
+            <div className="post__no-posts">
+              <div className="post__text">ありません</div>
+            </div>
+          )}
+        </div>
+      )}
+      {activeTab === "following" && (
+        <div className="post">
+          {followingPosts?.length > 0 ? (
+            followingPosts?.map((post) => <PostBox post={post} key={post.id} />)
+          ) : (
+            <div className="post__no-posts">
+              <div className="post__text">ありません</div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
