@@ -7,7 +7,7 @@ import PostEdit from "pages/posts/edit";
 import ProfilePage from "pages/profile";
 import ProfileEdit from "pages/profile/edit";
 import SearchPage from "pages/search";
-import NotificationsPage from "pages/notifications/notifications";
+import NotificationsPage from "pages/notifications";
 import LoginPage from "pages/users/login";
 import SignupPage from "pages/users/signup";
 

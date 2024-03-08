@@ -9,6 +9,7 @@ import AuthContext from "context/AuthContext";
 import { getAuth, signOut } from "firebase/auth"; // 로그아웃
 import { app } from "firebaseApp";
 import { toast } from "react-toastify";
+import { IoMdNotificationsOutline } from "react-icons/io";
 
 export default function MenuList() {
   const { user } = useContext(AuthContext); // 🟡  useContext로 user받아 쓰기
@@ -21,17 +22,22 @@ export default function MenuList() {
         {/* 1. 홈 */}
         <button type="button" onClick={() => navigate("/")}>
           <CiHome className="footer__icon" />
-          Home
+          ホーム
         </button>
 
         {/* 2. 프로필 */}
         <button type="button" onClick={() => navigate("/profile")}>
-          <CiUser className="footer__icon" /> Profile
+          <CiUser className="footer__icon" /> プロフィール
         </button>
 
         {/* 3. 찾기 */}
         <button type="button" onClick={() => navigate("/search")}>
-          <MdOutlineSearch className="footer__icon" /> Search
+          <MdOutlineSearch className="footer__icon" /> サーチ
+        </button>
+
+        {/* 알림기능 */}
+        <button type="button" onClick={() => navigate("/notifications")}>
+          <IoMdNotificationsOutline className="footer__icon" /> お知らせ
         </button>
 
         {/* 4. 로그인 상태 : user의 유무에 따른 메뉴 로그인 버튼 상태 처리 */}
@@ -39,7 +45,7 @@ export default function MenuList() {
           // 4.1. Login 표시
           <button type="button" onClick={() => navigate("/users/login")}>
             <IoLogInSharp className="footer__icon" />
-            Login
+            ログイン
           </button>
         ) : (
           // 4.2. Logout 표시　 : 로그 아웃처리
@@ -52,7 +58,7 @@ export default function MenuList() {
             }}
           >
             <IoIosLogOut className="footer__icon" />
-            Logout
+            ログアウト
           </button>
         )}
       </div>

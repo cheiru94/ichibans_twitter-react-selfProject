@@ -32,6 +32,12 @@ export interface CommentProps {
 export default function CommentForm({ post }: CommentProps) {
   const [comment, setComment] = useState<string>("");
   const { user } = useContext(AuthContext);
+
+  // 10자까지 끊고 그 이후로는 ...
+  const truncate = (str: string) => {
+    return str?.length > 10 ? str?.substring(0, 10) + "..." : str;
+  };
+
   const onSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -54,7 +60,24 @@ export default function CommentForm({ post }: CommentProps) {
         comments: arrayUnion(commentObj),
       });
 
-      toast.success("댓글을 생성했습니다.");
+      // 댓글 생성 알림
+      if (user?.uid !== post?.uid) {
+        await addDoc(collection(db, "notifications"), {
+          createdAt: new Date()?.toLocaleDateString("ko", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
+          uid: post?.uid,
+          isRead: false,
+          url: `/posts/${post?.id}`,
+          content: `"${truncate(
+            post?.content
+          )}" にコメントが書き込まれました。`,
+        });
+      }
+
+      toast.success("コメントを作成しました");
       setComment("");
 
       try {
