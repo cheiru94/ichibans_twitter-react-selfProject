@@ -32,7 +32,9 @@ body {
   background-color: $background;
   color: $white;
 }
-
+.Toastify__toast-theme--dark {
+  background-color: transparent !important;
+}
 /* App 전체를 감싸는 컴포넌트 */
 .layout {
   max-width: 600px;
