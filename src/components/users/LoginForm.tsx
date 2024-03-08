@@ -106,7 +106,7 @@ export default function LoginForm() {
   return (
     <form className="form form--lg" onSubmit={onSubmit}>
       {/* 1. 로그인 문구 */}
-      <div className="form__title"> ログイン 🤗</div>
+      <div className="form__title"> ツブヤキング </div>
       {/* 2. 이메일 */}
       <div className="form__block">
         <label htmlFor="email">メール</label>
