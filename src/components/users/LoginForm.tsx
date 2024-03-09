@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import tsubuyaki from "tsubuyaki.svg";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -106,6 +106,9 @@ export default function LoginForm() {
   return (
     <form className="form form--lg" onSubmit={onSubmit}>
       {/* 1. 로그인 문구 */}
+      <div className="logowrap">
+        <img src={tsubuyaki} alt="imglogo" />
+      </div>
       <div className="form__title"> ツブヤキング </div>
       {/* 2. 이메일 */}
       <div className="form__block">
